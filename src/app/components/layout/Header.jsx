@@ -7,6 +7,7 @@ const Header = () => {
   const cart = useSelector((state) => state.cart.cart); // full cart object
   return (
     <>
+      {/* header */}
       <div className="container-fluid fixed-top">
         <div className="container topbar bg-primary d-none d-lg-block">
           <div className="d-flex justify-content-between">
