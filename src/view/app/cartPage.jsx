@@ -1,13 +1,11 @@
 "use client";
 import {
-  addToCart,
-  applyCoupon,
-  fetchCartItems,
-  removeCoupon,
-  removeFromCart,
-  updateItemInCart,
+    applyCoupon,
+    fetchCartItems,
+    removeCoupon,
+    removeFromCart,
+    updateItemInCart,
 } from "@/redux/slices/cartSlice";
-import { decodeHTMLEntities } from "@/utils/decodeHtmlEntities";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -26,7 +24,7 @@ const CartDetailPage = () => {
 
   // Remove cart
   const handleRemove = (cartKey) => {
-    dispatch(removeFromCart(cartKey));
+    dispatch(removeFromCart({cartKey})).then(() => dispatch(fetchCartItems()));
   };
 
   // // increment cart
@@ -41,16 +39,16 @@ const CartDetailPage = () => {
   //   dispatch(updateItemInCart({ cartKey, quantity: currentQty - 1 }));
   // };
 
-  const handleIncrement = async (cartKey, currentQty) => {
+  const handleIncrement = (cartKey, currentQty) => {
     setUpdatingItemKey(cartKey);
-    await dispatch(updateItemInCart({ cartKey, quantity: currentQty + 1 }));
+    dispatch(updateItemInCart({ cartKey, quantity: currentQty + 1 }));
     setUpdatingItemKey(null);
   };
 
-  const handleDecrement = async (cartKey, currentQty) => {
+  const handleDecrement = (cartKey, currentQty) => {
     if (currentQty <= 1) return;
     setUpdatingItemKey(cartKey);
-    await dispatch(updateItemInCart({ cartKey, quantity: currentQty - 1 }));
+    dispatch(updateItemInCart({ cartKey, quantity: currentQty - 1 }));
     setUpdatingItemKey(null);
   };
   // apply coupon function
@@ -62,7 +60,7 @@ const CartDetailPage = () => {
 
     if (applyCoupon.rejected.match(resultAction)) {
       const message = resultAction.payload?.message;
-      setCouponError(decodeHTMLEntities(message) || "Failed to apply coupon");
+      setCouponError(message || "Failed to apply coupon");
     }
   };
   // remove coupon function

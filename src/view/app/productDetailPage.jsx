@@ -56,6 +56,7 @@ const ProductDetailPage = ({ slug }) => {
                         <Image
                           width={500}
                           height={500}
+                          className="img-fluid w-100 rounded"
                           src={
                             product?.images?.[0]?.src || "/images/baner-1.jpg"
                           }

@@ -4,7 +4,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const Header = () => {
-  const cart = useSelector((state) => state.cart.cart); // full cart object
+  const {quantity} = useSelector((state) => state.cart); // full cart object
   return (
     <>
       {/* header */}
@@ -40,7 +40,7 @@ const Header = () => {
         </div>
         <div className="container px-0">
           <nav className="navbar navbar-light bg-white navbar-expand-xl">
-            <Link href="index.html" className="navbar-brand">
+            <Link href="/" className="navbar-brand">
               <h1 className="text-primary display-6">Fruitables</h1>
             </Link>
             <button
@@ -59,12 +59,12 @@ const Header = () => {
                 <Link href="/" className="nav-item nav-link active">
                   Home
                 </Link>
-                <Link href="shop" className="nav-item nav-link">
+                <Link href="/shop" className="nav-item nav-link">
                   Shop
                 </Link>
-                <Link href="product-detail" className="nav-item nav-link">
+                {/* <Link href="product-detail" className="nav-item nav-link">
                   Shop Detail
-                </Link>
+                </Link> */}
                 <div className="nav-item dropdown">
                   <Link
                     href="#"
@@ -74,13 +74,13 @@ const Header = () => {
                     Pages
                   </Link>
                   <div className="dropdown-menu m-0 bg-secondary rounded-0">
-                    <Link href="cart" className="dropdown-item">
+                    <Link href="/cart" className="dropdown-item">
                       Cart
                     </Link>
-                    <Link href="chackout.html" className="dropdown-item">
+                    <Link href="/chackout" className="dropdown-item">
                       Chackout
                     </Link>
-                    <Link href="testimonial.html" className="dropdown-item">
+                    <Link href="/testimonial" className="dropdown-item">
                       Testimonial
                     </Link>
                     <Link href="404.html" className="dropdown-item">
@@ -88,7 +88,7 @@ const Header = () => {
                     </Link>
                   </div>
                 </div>
-                <Link href="contact" className="nav-item nav-link">
+                <Link href="/contact" className="nav-item nav-link">
                   Contact
                 </Link>
               </div>
@@ -100,13 +100,13 @@ const Header = () => {
                 >
                   <i className="fas fa-search text-primary" />
                 </button>
-                <Link href="cart" className="position-relative me-4 my-auto">
+                <Link href="/cart" className="position-relative me-4 my-auto">
                   <i className="fa fa-shopping-bag fa-2x" />
                   <span
                     className="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                     style={{ top: "-5px", left: 15, height: 20, minWidth: 20 }}
                   >
-                    {cart?.items_count}
+                    {quantity || 0}
                   </span>
                 </Link>
                 <Link href="#" className="my-auto">

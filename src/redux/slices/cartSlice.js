@@ -5,7 +5,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchCartItems = createAsyncThunk('cart/fetchCart', async (payload, { rejectWithValue }) => {
     try {
         const cart = await cartService.fetchCart()
-        return cart
+        return cart.data
     } catch (error) {
         return rejectWithValue(error)
     }
@@ -15,7 +15,7 @@ export const addToCart = createAsyncThunk(
     'cart/addToCart',
     async (payload, { rejectWithValue }) => {
         try {
-            const cart = await cartService.addCart(payload.id, payload.quantity || 1);
+            const cart = await cartService.addCart(payload);
             return cart;
         } catch (error) {
             return rejectWithValue(error);
@@ -25,9 +25,9 @@ export const addToCart = createAsyncThunk(
 
 export const removeFromCart = createAsyncThunk(
     "cart/removeFromCart",
-    async (cartKey, { rejectWithValue }) => {
+    async (payload, { rejectWithValue }) => {
         try {
-            const updatedCart = await cartService.removeCartItem(cartKey);
+            const updatedCart = await cartService.removeCartItem(payload);
             console.log(updatedCart, 'updatedCart');
 
             return updatedCart;
@@ -72,7 +72,7 @@ export const applyCoupon = createAsyncThunk(
 
             return result;
         } catch (error) {
-            return rejectWithValue({ message: error.message });
+            return rejectWithValue({ message: error.data.message });
         }
     }
 );
@@ -93,7 +93,7 @@ export const removeCoupon = createAsyncThunk(
 const initialState = {
     loading: false,
     quantity: 0,
-    cart: {}
+    cart: null
 }
 
 const cartSlice = createSlice({
@@ -128,7 +128,7 @@ const cartSlice = createSlice({
         })
         builder.addCase(addToCart.fulfilled, (state, action) => {
             state.loading = false;
-            state.cart = action.payload;
+            state.quantity = action.payload.data.items_count;
         });
         builder.addCase(addToCart.rejected, state => {
             state.loading = false
@@ -140,8 +140,8 @@ const cartSlice = createSlice({
         });
         builder.addCase(removeFromCart.fulfilled, (state, action) => {
             state.loading = false;
-            state.cart = action.payload;
-        });
+            state.quantity = action.payload.data.items_count;
+            });
         builder.addCase(removeFromCart.rejected, (state) => {
             state.loading = false;
         });
@@ -152,7 +152,6 @@ const cartSlice = createSlice({
         });
         builder.addCase(updateItemInCart.fulfilled, (state, action) => {
             state.loading = false;
-            state.cart = action.payload;
         });
         builder.addCase(updateItemInCart.rejected, (state) => {
             state.loading = false;
@@ -164,7 +163,6 @@ const cartSlice = createSlice({
         });
         builder.addCase(applyCoupon.fulfilled, (state, action) => {
             state.loading = false;
-            state.cart = action.payload;
         });
         builder.addCase(applyCoupon.rejected, (state) => {
             state.loading = false;
@@ -176,7 +174,6 @@ const cartSlice = createSlice({
         });
         builder.addCase(removeCoupon.fulfilled, (state, action) => {
             state.loading = false;
-            state.cart = action.payload;
         });
         builder.addCase(removeCoupon.rejected, (state) => {
             state.loading = false;

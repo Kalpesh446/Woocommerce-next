@@ -11,6 +11,7 @@ const Product = ({ product }) => {
   const dispatch = useDispatch();
 
   const handleAddToCart = () => {
+    console.log(product.id); 
     dispatch(addToCart({ id: product.id, quantity: 1 }));
   };
   return (
